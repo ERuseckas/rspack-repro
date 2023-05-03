@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"sourceMap": true,
+		"target": "es2017",
+		"jsx": "react",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"declaration": false,
+		"noImplicitAny": false,
+		"noImplicitReturns": false,
+		"removeComments": true,
+		"strict": false,
+		"strictNullChecks": true,
+		"skipLibCheck": true,
+		"outDir": "build",
+		"forceConsistentCasingInFileNames": true,
+		"allowSyntheticDefaultImports": true,
+		"incremental": true,
+		"rootDirs": ["src"],
+		"lib": ["es2017", "dom"],
+		"baseUrl": "."
+	},
+	"exclude": ["dist", "build", "node_modules", "../node_modules/**/*"],
+	"preset": "ts-jest"
+}

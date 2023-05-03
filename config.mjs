@@ -12,29 +12,66 @@ if (!isRunningRspack && !isRunningWebpack) {
  * @type {import('webpack').Configuration | import('@rspack/cli').Configuration}
  */
 const config = {
+  context: path.join(__dirname, "./src"),
   mode: "development",
   devtool: false,
   entry: {
-    main: "./src/index.js",
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        resourceQuery: /raw/,
-        type: "asset/source",
-      },
-    ],
+    main: "./index.tsx",
   },
   output: {
     path: isRunningWebpack
       ? path.resolve(__dirname, "webpack-dist")
       : path.resolve(__dirname, "rspack-dist"),
-    filename: "main.js",
+    filename: "file.[name].[hash].js",
+    chunkFilename: "chunk.[name].[hash].js",
+    publicPath: "/",
   },
   resolve: {
-    alias: {
-      "./answer": path.resolve(__dirname, "./src/answer.js?raw"),
+    extensions: [".js", ".ts", ".tsx"],
+    mainFields: ["module", "browser", "main"],
+  },
+  module: {
+    rules: isRunningWebpack
+      ? [
+          {
+            test: /\.tsx?$/,
+            use: [
+              {
+                loader: "ts-loader",
+                options: {
+                  configFile: "tsconfigWebpack.json",
+                  transpileOnly: true,
+                },
+              },
+            ],
+          },
+        ]
+      : [],
+  },
+  target: "web",
+  optimization: {
+    runtimeChunk: true,
+    splitChunks: {
+      cacheGroups: {
+        largeVendors: {
+          test: /[\\/]node_modules[\\/](zrender|moment).*$/,
+          name: "largeVendors",
+          chunks: "all",
+          reuseExistingChunk: true,
+        },
+        chartVendors: {
+          test: /[\\/]node_modules[\\/][^@echart|echart]/,
+          name: "chartVendors",
+          chunks: "all",
+          reuseExistingChunk: true,
+        },
+        separateOut: {
+          test: /[\\/]separateOut[\\/]/,
+          name: "separateOut",
+          chunks: "all",
+          reuseExistingChunk: true,
+        },
+      },
     },
   },
 };
